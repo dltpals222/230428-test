@@ -5,18 +5,10 @@ import Path from 'path'
 
 
 
-// fs.readFile('index.html',(err, data)=> {
-//   if(err){
-//     console.error("파일을 읽어오는데 실패했습니다.",err)
-//   } else {
-//     //* 파일을 읽어오는데 성공 후 기믹 작성
-//   }
-// })
-
 
 const fsAccess = path => {
   try{
-    fs.accessSync(path,fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK );
+    fs.accessSync(path,fs.constants.R_OK | fs.constants.W_OK );
     return true;
   } catch (err) {
     return false;
@@ -44,23 +36,32 @@ function innerHTML(body){
 
 async function makeDirFile (filename, path, body){
   let filePath = Path.join(Path.resolve(),path,filename);
-
+  
   if(fsAccess(path)){ //디렉토리가 있을때
     console.log('디렉토리가 존재합니다.');
-    fs.writeFile(filePath,innerHTML(body),err => {console.error(err)}); //파일 생성
   } else { //디렉토리가 없을때
     await fs.mkdir(path, { recursive: true }, err => console.error(err)); //*디렉토리 생성
-    fs.writeFile(filePath,innerHTML(body),err => {console.error(err)}); //파일 생성 
   }
-}
 
-makeDirFile('index.html','.','<p>그래그래</p>')
+  fs.writeFile(filePath,innerHTML(body),err => {console.error(err)}); //파일 생성 
+}
 
 const inquirerPrompt = [
   {
+    type : 'list',
+    name : 'tag',
+    message : '태그를 선택해주세요',
+    choices : ['p','div','a','ul','li']
+  },
+  {
     type : 'input',
-    name : 'p',
+    name : 'Text',
     message : '내용을 입력해주세요'
+  },
+  {
+    type : 'input',
+    name : 'directory',
+    message : '파일 위치를 지정해주세요'
   },
   {
     type : 'confirm',
@@ -80,8 +81,8 @@ fileName
   .action(option => {
     inquirer
       .prompt(inquirerPrompt)
-      .than(answers => {
-        const bodyText = `<${Object.keys(answers[0])[0]}> ${answers.p} </${Object.keys(answers[0])[0]}>`;
+      .then(answers => {
+        const bodyText = `<${answers.tag}> ${answers.p} </${answers.tag}>`;
         if(answers.confirm){
           makeDirFile(option.name, option.directory, bodyText);
           console.log('파일이 생성되었습니다.');
