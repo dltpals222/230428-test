@@ -35,12 +35,13 @@ function innerHTML(body){
 //"/result/"+filename+".html"
 
 async function makeDirFile (filename, path, body){
+  let folderPath = Path.join(Path.resolve(),"/result",path)
   let filePath = Path.join(Path.resolve(),"/result",path,filename);
   
-  if(fsAccess(path)){ //디렉토리가 있을때
+  if(fsAccess(folderPath)){ //디렉토리가 있을때
     console.log('디렉토리가 존재합니다.');
   } else { //디렉토리가 없을때
-    await fs.mkdir(path, { recursive: true }, err => console.error(err)); //*디렉토리 생성
+    await fs.mkdir(folderPath, { recursive: true }, err => console.error(err)); //*디렉토리 생성
   }
 
   fs.writeFile(filePath,innerHTML(body),err => {console.error(err)}); //파일 생성 
