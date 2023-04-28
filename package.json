@@ -12,6 +12,7 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/dltpals222/230428-test/issues"
   },
