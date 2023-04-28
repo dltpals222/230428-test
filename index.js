@@ -15,7 +15,10 @@ fileName
       .prompt(inquirerPrompt)
       .than(answers => {
         if(answers.confirm){
-
+          const bodyText = `<${Object.keys(answers[0])[0]}> ${answers.p} </${Object.keys(answers[0])[0]}>`
+          makeDirFile(option.name, option.directory, bodyText)
+        } else {
+          console.log('취소되었습니다.')
         }
 
       })
