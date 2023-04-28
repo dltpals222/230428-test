@@ -1,28 +1,9 @@
-const program = require('commander')
-const inquirer = require('inquirer')
-const fs = require('fs')
-const path = require('path')
+import {program} from 'commander'
+import inquirer from 'inquirer'
+import fs from 'fs'
+import Path from 'path'
 
-const fileName = program.Command('mkfile')
 
-fileName
-  .usage('--name <name> --path [path]')
-  .description('파일을 생성합니다.')
-  .option('-n, --name[name]','파일이름을 입력하세요','index.html')
-  .option('-d, --directory[path]','경로를 입력하세요','.')
-  .action(option => {
-    inquirer
-      .prompt(inquirerPrompt)
-      .than(answers => {
-        if(answers.confirm){
-          const bodyText = `<${Object.keys(answers[0])[0]}> ${answers.p} </${Object.keys(answers[0])[0]}>`
-          makeDirFile(option.name, option.directory, bodyText)
-        } else {
-          console.log('취소되었습니다.')
-        }
-
-      })
-  })
 
 // fs.readFile('index.html',(err, data)=> {
 //   if(err){
@@ -62,7 +43,7 @@ function innerHTML(body){
 
 
 async function makeDirFile (filename, path, body){
-  let filePath = path.join(__dirname,path,filename);
+  let filePath = Path.join(__dirname,path,filename);
 
   if(fsAccess(path)){ //디렉토리가 있을때
     console.log('디렉토리가 존재합니다.');
@@ -86,3 +67,25 @@ const inquirerPrompt = [
   }
 ]
 
+
+const fileName = program.command('mkfile')
+
+fileName
+  .usage('--name <name> --path [path]')
+  .description('파일을 생성합니다.')
+  .option('-n, --name [name]','파일이름을 입력하세요','index.html')
+  .option('-d, --directory [path]','경로를 입력하세요','.')
+  .action(option => {
+    inquirer
+      .prompt(inquirerPrompt)
+      .than(answers => {
+        const bodyText = `<${Object.keys(answers[0])[0]}> ${answers.p} </${Object.keys(answers[0])[0]}>`;
+        if(answers.confirm){
+          makeDirFile(option.name, option.directory, bodyText);
+          console.log('파일이 생성되었습니다.');
+        } else {
+          console.log('취소되었습니다.');
+        }
+
+      })
+  })
