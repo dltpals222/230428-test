@@ -43,7 +43,7 @@ function innerHTML(body){
 
 
 async function makeDirFile (filename, path, body){
-  let filePath = Path.join(__dirname,path,filename);
+  let filePath = Path.join(Path.resolve(),path,filename);
 
   if(fsAccess(path)){ //디렉토리가 있을때
     console.log('디렉토리가 존재합니다.');
@@ -53,6 +53,8 @@ async function makeDirFile (filename, path, body){
     fs.writeFile(filePath,innerHTML(body),err => {console.error(err)}); //파일 생성 
   }
 }
+
+makeDirFile('index.html','.','<p>그래그래</p>')
 
 const inquirerPrompt = [
   {
