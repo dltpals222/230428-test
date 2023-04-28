@@ -32,10 +32,10 @@ function innerHTML(body){
   </body>
   </html>`
 }
-
+//"/result/"+filename+".html"
 
 async function makeDirFile (filename, path, body){
-  let filePath = Path.join(Path.resolve(),path,filename);
+  let filePath = Path.join(Path.resolve(),"/result",path,filename);
   
   if(fsAccess(path)){ //디렉토리가 있을때
     console.log('디렉토리가 존재합니다.');
@@ -55,13 +55,14 @@ const inquirerPrompt = [
   },
   {
     type : 'input',
-    name : 'Text',
+    name : 'text',
     message : '내용을 입력해주세요'
   },
   {
     type : 'input',
     name : 'directory',
-    message : '파일 위치를 지정해주세요'
+    message : '파일 위치를 지정해주세요.',
+    default : '.'
   },
   {
     type : 'confirm',
@@ -82,9 +83,9 @@ fileName
     inquirer
       .prompt(inquirerPrompt)
       .then(answers => {
-        const bodyText = `<${answers.tag}> ${answers.p} </${answers.tag}>`;
+        let bodyText = `<${answers.tag}> ${answers.text} </${answers.tag}>`;
         if(answers.confirm){
-          makeDirFile(option.name, option.directory, bodyText);
+          makeDirFile(option.name, answers.directory, bodyText);
           console.log('파일이 생성되었습니다.');
         } else {
           console.log('취소되었습니다.');
@@ -92,3 +93,5 @@ fileName
 
       })
   })
+
+  fileName.parse(process.argv)
